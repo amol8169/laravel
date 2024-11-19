@@ -1,6 +1,6 @@
 FROM composer:latest AS builder
 WORKDIR /app
-COPY composer.* .
+COPY composer.json composer.lock ./
 RUN composer install --no-ansi --ignore-platform-reqs
 
 # Stage 2: PHP with Apache
@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install -y \
 RUN a2enmod rewrite headers deflate
 
 # Copy application code
-COPY . .
+COPY . ./
 
 # Copy Composer dependencies from the first stage
 COPY --from=builder /app/vendor .
